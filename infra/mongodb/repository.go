@@ -2,6 +2,7 @@ package mongodb
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/bson"
 	"log"
 	"os"
 	"time"
@@ -46,6 +47,10 @@ func NewClient() *mongo.Client {
 
 type Repository interface {
 	insert(entity interface{}) error
+	replace(qry, entity interface{}) error
+
+	get(qry interface{}) interface{}
+	count(qry interface{}) int64
 }
 
 func (s Storage) insert(entity interface{}) error {
@@ -57,4 +62,43 @@ func (s Storage) insert(entity interface{}) error {
 	_, err := c.client.Database(c.db).Collection(c.collection).InsertOne(ctx, entity)
 
 	return err
+}
+
+func (s Storage) replace(qry, entity interface{}) error {
+	c := newStorage()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := c.client.Database(c.db).Collection(c.collection).ReplaceOne(ctx, qry, entity)
+
+	return err
+}
+
+func (s Storage) get(qry interface{}) interface{} {
+	c := newStorage()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var result bson.M
+	if err := c.client.Database(c.db).Collection(c.collection).FindOne(ctx, qry).Decode(&result); err != nil {
+		return nil
+	}
+
+	return result
+}
+
+func (s Storage) count(qry interface{}) int64 {
+	c := newStorage()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	cnt, err := c.client.Database(c.db).Collection(c.collection).CountDocuments(ctx, qry)
+	if err != nil {
+		return -1
+	}
+
+	return cnt
 }
