@@ -44,13 +44,13 @@ func RegisterImageRequestToImage(req RegisterImageRequest) middle.RegisterImageR
 	}
 }
 
-type UploadImageChunkToChunk struct {
+type UploadImageChunkRequest struct {
 	ID   int    `json:"id"`
 	Size int    `json:"size"`
 	Data string `json:"data"`
 }
 
-func (u UploadImageChunkToChunk) validate() error {
+func (u UploadImageChunkRequest) validate() error {
 	if u.ID <= 0 || u.Size <= 0 {
 		return errors.New(ErrMalformedRequest)
 	}
@@ -61,7 +61,7 @@ func (u UploadImageChunkToChunk) validate() error {
 	return nil
 }
 
-func UploadImageChunkToChunkToChunk(req UploadImageChunkToChunk) middle.UploadImageChunk {
+func UploadImageChunkToChunk(req UploadImageChunkRequest) middle.UploadImageChunk {
 	return middle.UploadImageChunk{
 		ID:   req.ID,
 		Size: req.Size,

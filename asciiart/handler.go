@@ -1,19 +1,27 @@
-package ascii_art
+package asciiart
 
 import (
 	"github.com/FaridehGhani/ompfinex_challenge/infra/mongodb"
 	"github.com/FaridehGhani/ompfinex_challenge/middle"
 )
 
-type AsciiArtApp struct {
+type Application struct {
 	middle.ASCIIArtService
 	images mongodb.Images
 }
 
-func (app AsciiArtApp) RegisterImage(image middle.RegisterImageRequest) error {
+func (app Application) RegisterImage(image middle.RegisterImageRequest) error {
 	return app.images.AddImage(RegisterImageRequestToImage(image))
 }
 
-func (app AsciiArtApp) NewImageChunk(sha256 string, chunk middle.UploadImageChunk) error {
-	return nil
+func (app Application) UploadImageChunk(sha256 string, chunk middle.UploadImageChunk) error {
+	image := app.images.GetImage(sha256)
+	if image == nil {
+		return middle.ErrImageNotFound
+	}
+	if err := image.AppendChunk(UploadImageChunkToChunk(chunk)); err != nil {
+		return err
+	}
+
+	return app.images.AddChunk(*image)
 }
