@@ -29,7 +29,7 @@ func (r RegisterImageRequest) validate() error {
 	if len(strings.TrimSpace(r.SHA256)) == 0 {
 		return errors.New(ErrMalformedRequest)
 	}
-	if r.Size <= 0 || r.ChunkSize <= 0 {
+	if r.Size < 0 || r.ChunkSize < 0 {
 		return errors.New(ErrMalformedRequest)
 	}
 
@@ -51,7 +51,7 @@ type UploadImageChunkRequest struct {
 }
 
 func (u UploadImageChunkRequest) validate() error {
-	if u.ID <= 0 || u.Size <= 0 {
+	if u.ID < 0 || u.Size < 0 {
 		return errors.New(ErrMalformedRequest)
 	}
 	if len(strings.TrimSpace(u.Data)) == 0 {
