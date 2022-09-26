@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/FaridehGhani/ompfinex_challenge/infra/mongodb"
 	"log"
 	"os"
 
 	env "github.com/joho/godotenv"
 
 	"github.com/FaridehGhani/ompfinex_challenge/api"
+	"github.com/FaridehGhani/ompfinex_challenge/infra/mongodb"
 )
 
 func init() {
