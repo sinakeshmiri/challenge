@@ -1,8 +1,8 @@
-package asciiart
+package uploadchunks
 
 import (
-	"github.com/FaridehGhani/ompfinex_challenge/asciiart/Image"
 	"github.com/FaridehGhani/ompfinex_challenge/middle"
+	"github.com/FaridehGhani/ompfinex_challenge/uploadchunks/Image"
 )
 
 func RegisterImageRequestToImage(src middle.RegisterImageRequest) Image.Image {

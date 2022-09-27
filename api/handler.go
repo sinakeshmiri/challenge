@@ -5,11 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/FaridehGhani/ompfinex_challenge/asciiart"
+	"github.com/FaridehGhani/ompfinex_challenge/uploadchunks"
 )
 
 type apiHandler struct {
-	service asciiart.Application
+	service uploadchunks.Application
 }
 
 func (api apiHandler) RegisterImage(ctx *gin.Context) {

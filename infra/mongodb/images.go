@@ -3,8 +3,8 @@ package mongodb
 import (
 	"go.mongodb.org/mongo-driver/bson"
 
-	img "github.com/FaridehGhani/ompfinex_challenge/asciiart/Image"
 	"github.com/FaridehGhani/ompfinex_challenge/middle"
+	img "github.com/FaridehGhani/ompfinex_challenge/uploadchunks/Image"
 )
 
 type Images struct {

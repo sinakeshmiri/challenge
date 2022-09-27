@@ -1,4 +1,4 @@
-package asciiart
+package uploadchunks
 
 import (
 	"github.com/FaridehGhani/ompfinex_challenge/infra/mongodb"
