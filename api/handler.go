@@ -5,11 +5,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/FaridehGhani/ompfinex_challenge/mergechunks"
 	"github.com/FaridehGhani/ompfinex_challenge/uploadchunks"
 )
 
 type apiHandler struct {
-	service uploadchunks.Application
+	upl uploadchunks.Application
+	dwl mergechunks.Application
 }
 
 func (api apiHandler) RegisterImage(ctx *gin.Context) {
@@ -23,7 +25,7 @@ func (api apiHandler) RegisterImage(ctx *gin.Context) {
 		response(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := api.service.RegisterImage(RegisterImageRequestToImage(req)); err != nil {
+	if err := api.upl.RegisterImage(RegisterImageRequestToImage(req)); err != nil {
 		response(ctx, statusCode(err.Error()), err.Error())
 		return
 	}
@@ -43,7 +45,7 @@ func (api apiHandler) UploadImageChunk(ctx *gin.Context) {
 		response(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := api.service.UploadImageChunk(sha256, UploadImageChunkToChunk(req)); err != nil {
+	if err := api.upl.UploadImageChunk(sha256, UploadImageChunkToChunk(req)); err != nil {
 		response(ctx, statusCode(err.Error()), err.Error())
 		return
 	}
@@ -52,7 +54,17 @@ func (api apiHandler) UploadImageChunk(ctx *gin.Context) {
 }
 
 func (api apiHandler) DownloadImage(ctx *gin.Context) {
+	sha256 := ctx.Param("sha256")
+	image, err := api.dwl.DownloadImage(sha256)
+	if err != nil {
+		response(ctx, statusCode(err.Error()), err.Error())
+		return
+	}
+	if image == nil {
+		response(ctx, http.StatusNotFound, ErrImageNotFound)
+	}
 
+	ctx.String(http.StatusOK, *image)
 }
 
 func response(ctx *gin.Context, code int, msg string) {
