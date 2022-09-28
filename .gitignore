@@ -23,6 +23,3 @@
 
 # Cache
 .persist
-
-# Env
-.env
