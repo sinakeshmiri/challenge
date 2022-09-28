@@ -1,24 +1,43 @@
-package uploadchunks
+package middle
 
 import (
-	"github.com/FaridehGhani/ompfinex_challenge/middle"
-	"github.com/FaridehGhani/ompfinex_challenge/uploadchunks/Image"
+	"github.com/FaridehGhani/ompfinex_challenge/middle/proto"
 )
 
-func RegisterImageRequestToImage(src middle.RegisterImageRequest) Image.Image {
-	return Image.Image{
-		SHA256:    src.SHA256,
-		Size:      src.Size,
-		ChunkSize: src.ChunkSize,
+func ProtoImageToImage(src *proto.Image) *Image {
+	if src == nil {
+		return nil
+	}
 
-		Chunks: nil,
+	return &Image{
+		SHA256:    src.Sha256,
+		Size:      int(src.Size),
+		ChunkSize: int(src.ChunkSize),
+		Chunks:    ProtoChunkToChunkListPtrVal(src.Chunks),
 	}
 }
 
-func UploadImageChunkToChunk(chunk middle.UploadImageChunk) Image.Chunk {
-	return Image.Chunk{
-		ID:   chunk.ID,
-		Size: chunk.Size,
-		Data: chunk.Data,
+func ProtoChunkToChunkPrtVal(src *proto.Chunk) Chunk {
+	if src == nil {
+		return Chunk{}
 	}
+
+	return Chunk{
+		ID:   int(src.ID),
+		Size: int(src.Size),
+		Data: src.Data,
+	}
+}
+
+func ProtoChunkToChunkListPtrVal(src []*proto.Chunk) []Chunk {
+	if src == nil {
+		return nil
+	}
+
+	dto := make([]Chunk, len(src))
+	for k, v := range src {
+		dto[k] = ProtoChunkToChunkPrtVal(v)
+	}
+
+	return dto
 }
