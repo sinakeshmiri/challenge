@@ -54,9 +54,6 @@ func (u UploadImageChunkRequest) validate() error {
 	if u.ID < 0 || u.Size < 0 {
 		return errors.New(ErrMalformedRequest)
 	}
-	if len(strings.TrimSpace(u.Data)) == 0 {
-		return errors.New(ErrMalformedRequest)
-	}
 
 	return nil
 }
