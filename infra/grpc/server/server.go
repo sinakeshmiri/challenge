@@ -1,10 +1,12 @@
 package main
 
 import (
-	"github.com/FaridehGhani/ompfinex_challenge/middle/proto"
-	"google.golang.org/grpc"
 	"log"
 	"net"
+
+	"google.golang.org/grpc"
+
+	"github.com/FaridehGhani/ompfinex_challenge/middle/proto"
 )
 
 func main() {
